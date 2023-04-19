@@ -1,7 +1,12 @@
+import { generateTagsDbQuery } from "./generateTagsDbQuery.js";
 import { pool } from "./pgCon.js";
-import { areaToString } from "../utils/area.js";
 
 export const getTagsFromDb = async (area, group = 'a') => {
-    const tags = await pool.query(`SELECT name FROM ${areaToString(area, true)} WHERE name LIKE '${group}%'`);
-    return tags;
+    const query = generateTagsDbQuery(area, group);
+
+    console.log(query);
+
+    const tags = await pool.query(query);
+    
+    return tags.rows.map(r => r.name);
 };

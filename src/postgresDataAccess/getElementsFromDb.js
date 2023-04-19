@@ -1,8 +1,8 @@
 import { pool } from "./pgCon.js";
-import { generateDbQuery } from "./generateDbQuery.js";
+import { generateElementsDbQuery } from "./generateElementsDbQuery.js";
 
 export const getElementsFromDb = async (params) => {
-    const query = generateDbQuery(params);
+    const query = generateElementsDbQuery(params);
 
     console.log(query);
 

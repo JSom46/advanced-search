@@ -13,7 +13,9 @@ import { Area } from "../utils/area.js";
 	}
 ]
 */
-export const generateDbQuery = (query) => {
+export const generateElementsDbQuery = (query) => {
+	if(query.length === 0) return {query: "SELECT id FROM elements"};
+
 	let queryString = "SELECT id FROM ";
 	const vals = [];
 	const whereClause = [];
