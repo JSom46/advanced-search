@@ -13,7 +13,7 @@ import { Area } from "../utils/area.js";
 	}
 ]
 */
-export const generateElementsDbQuery = (query) => {
+export const generateElementsDbQuery = (query, page, pageSize) => {
 	if(query.length === 0) return {query: "SELECT id FROM elements"};
 
 	let queryString = "SELECT id FROM ";
@@ -61,8 +61,10 @@ export const generateElementsDbQuery = (query) => {
 	});
 
 	if(whereClause.length > 0){
-		queryString += `(${whereClause.join(" UNION ")}) id;`;
+		queryString += `(${whereClause.join(" UNION ")}) id`;
 	}
+
+	if(!isNaN(page) && ~isNaN(pageSize) && page > 0 && pageSize > 0) queryString += ` OFFSET ${(page - 1) * pageSize} LIMIT ${pageSize};`;
   
 	return {query: queryString, parameters: vals};
 };

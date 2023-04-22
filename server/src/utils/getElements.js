@@ -19,7 +19,7 @@ import { parseHitomiURL } from "../hitomiDataAccess/parseHitomiURL.js";
 	}
 ]
 */
-export const getElements = async (params) => {
+export const getElements = async (params, page = 1, pageSize = 50) => {
     const outdatedTags = await getOutdatedTags(params);
 
     console.log("Outdated tags");
@@ -42,5 +42,5 @@ export const getElements = async (params) => {
         addTagElementsToDb(t.name, t.area, tagsElements[idx])
     ));
 
-    return await getElementsFromDb(params);
+    return await getElementsFromDb(params, page, pageSize);
 }

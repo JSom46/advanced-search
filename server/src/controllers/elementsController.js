@@ -8,10 +8,13 @@ const router = Express.Router();
 
 router.post("/", async (req, res) => {
     req.body.params = req.body.params || [];
-    if(!validateElementsQueryParams(req.body.params)) return res.sendStatus(400);
+    if(!validateElementsQueryParams(req.body.params, req.body.page, req.body.pageSize)) return res.sendStatus(400);
+
+    console.log(req.body.page);
+    console.log(req.body.pageSize)
 
     try{
-        const elements = await getElements(req.body.params);
+        const elements = await getElements(req.body.params, req.body.page, req.body.pageSize);
         return res.status(200).send({elements: elements});
     }
     catch(err){
