@@ -1,4 +1,4 @@
-export const isValidTagGroup = tagGroup => /^(?:[a-z]|123)$/.test(tagGroup);
+export const isValidTagGroup = tagGroup => /^(?:[a-z]|123|all)$/.test(tagGroup);
 
 export const sqlRegexFromTagGroup = tagGroup => {
     if(/^(?:[a-z])$/.test(tagGroup)) return `^${tagGroup}.*$`;
