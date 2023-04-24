@@ -14,7 +14,7 @@ import { Area } from "../utils/area.js";
 ]
 */
 export const generateElementsDbQuery = (query, page, pageSize) => {
-	if(query.length === 0) return {query: "SELECT id FROM elements"};
+	if(query.length === 0) return {query: `SELECT id FROM elements ${!isNaN(page) && ~isNaN(pageSize) && page > 0 && pageSize > 0 ? ` OFFSET ${(page - 1) * pageSize} LIMIT ${pageSize};` : ""}`};
 
 	let queryString = "SELECT id FROM ";
 	const vals = [];
