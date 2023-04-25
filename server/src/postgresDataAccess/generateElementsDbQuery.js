@@ -14,9 +14,6 @@ import { Area } from "../utils/area.js";
 ]
 */
 export const generateElementsDbQuery = (query, page, pageSize) => {
-	if(query.length === 0) return {query: `SELECT id FROM elements ${!isNaN(page) && ~isNaN(pageSize) && page > 0 && pageSize > 0 ? ` OFFSET ${(page - 1) * pageSize} LIMIT ${pageSize};` : ""}`};
-
-	let queryString = "SELECT id FROM ";
 	const vals = [];
 	const whereClause = [];
 	let i = 1;
@@ -44,7 +41,6 @@ export const generateElementsDbQuery = (query, page, pageSize) => {
 				}
 				case Area.artist: {
 					subQuery.push(`(${v.negate ? "SELECT c.id FROM elements c EXCEPT " : ""}SELECT a.element id FROM element_artist a WHERE a.artist = (SELECT b.id FROM artists b WHERE b.name = $${i++}))`);
-				
 					break;
 				}
 				default: {
@@ -60,11 +56,9 @@ export const generateElementsDbQuery = (query, page, pageSize) => {
 	  	}
 	});
 
-	if(whereClause.length > 0){
-		queryString += `(${whereClause.join(" UNION ")}) id`;
-	}
-
-	if(!isNaN(page) && ~isNaN(pageSize) && page > 0 && pageSize > 0) queryString += ` OFFSET ${(page - 1) * pageSize} LIMIT ${pageSize};`;
+	const queryString = "SELECT id FROM " + 
+		(whereClause.length > 0 ? `(${whereClause.join(" UNION ")}) id` : "elements") + 
+		(!isNaN(page) && !isNaN(pageSize) && page > 0 && pageSize > 0 ? ` OFFSET ${(page - 1) * pageSize} LIMIT ${pageSize};` : ";");
   
 	return {query: queryString, parameters: vals};
 };
