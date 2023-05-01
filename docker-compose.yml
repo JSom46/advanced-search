@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+    search-server:
+        container_name: search-server
+        image: hitomi-search-server
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+            
+    

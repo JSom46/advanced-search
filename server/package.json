@@ -21,7 +21,6 @@
   "homepage": "https://github.com/JSom46/web-scrapper#readme",
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "pg": "^8.10.0",
     "typescript": "^5.0.4"

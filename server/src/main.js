@@ -1,4 +1,3 @@
-import {} from "dotenv/config";
 import Express from "express";
 import { elementsController } from "./controllers/elementsController.js";
 import { tagsController } from "./controllers/tagsController.js";
