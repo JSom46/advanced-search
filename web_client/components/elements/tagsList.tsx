@@ -42,8 +42,8 @@ export default function TagsList({
         onInput={handleFilterChange}
       />
       <div className={styles["flex-container"]}>
-        {columns.map((column) => (
-          <ul className={styles["flex-element"]}>
+        {columns.map((column, idx) => (
+          <ul key={idx} className={styles["flex-element"]}>
             {column.map((tag) => (
               <li key={tag}>
                 <Link href={encodeURI(`/tags/${area}/${tag}`)}>{tag}</Link>
