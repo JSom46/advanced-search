@@ -9,5 +9,5 @@ app.use("/elements", elementsController);
 app.use("/tags", tagsController);
 
 app.listen(process.env.SERVER_PORT || 8080, () => {
-    console.log(`Server listening on port ${process.env.SERVER_PORT || 8080}.`);
+  console.log(`Server listening on port ${process.env.SERVER_PORT || 8080}.`);
 });
