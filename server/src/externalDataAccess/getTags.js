@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { Area, areaToString } from "./area.js";
+import { Area, areaToString } from "../utils/area.js";
 import { pool } from "../postgresDataAccess/pgCon.js";
 
 export const getTags = async (area) => {
