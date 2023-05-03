@@ -77,10 +77,10 @@ export const generateElementsDbQuery = (query, page, pageSize) => {
   });
 
   const queryString =
-    "SELECT id FROM " +
+    "SELECT id FROM" +
     (whereClause.length > 0
-      ? `(${whereClause.join(" UNION ")}) id`
-      : "elements") +
+      ? ` (${whereClause.join(" UNION ")}) id`
+      : " elements") +
     (!isNaN(page) && !isNaN(pageSize) && page > 0 && pageSize > 0
       ? ` OFFSET ${(page - 1) * pageSize} LIMIT ${pageSize};`
       : ";");
