@@ -91,57 +91,30 @@ const langs = {
   25: "finnish",
   15: "latin",
 };
-const langArr = [];
 
-getTags(Area.tag)
-  .then((tags) => {
-    addTagsToDb(tags, Area.tag);
-    console.log("tags added.");
-  })
-  .catch((err) => {
-    console.log("error while inserting tags.");
-    throw err;
-  });
+try {
+  const tags = await getTags(Area.tag);
+  await addTagsToDb(tags, Area.tag);
+  console.log("tags added.");
 
-getTags(Area.artists)
-  .then((artists) => {
-    addTagsToDb(artists, Area.artist);
-    console.log("artists added.");
-  })
-  .catch((err) => {
-    console.log("error while inserting artists.");
-    throw err;
-  });
+  const artists = await getTags(Area.artist);
+  await addTagsToDb(artists, Area.artist);
+  console.log("artists added.");
 
-getTags(Area.characters)
-  .then((characters) => {
-    addTagsToDb(characters, Area.character);
-    console.log("characters added.");
-  })
-  .catch((err) => {
-    console.log("error while inserting characters.");
-    throw err;
-  });
+  const characters = await getTags(Area.character);
+  await addTagsToDb(characters, Area.character);
+  console.log("characters added.");
 
-getTags(Area.series)
-  .then((series) => {
-    addTagsToDb(series, Area.series);
-    console.log("series added.");
-  })
-  .catch((err) => {
-    console.log("error while inserting series.");
-    throw err;
-  });
+  const series = await getTags(Area.series);
+  await addTagsToDb(series, Area.series);
+  console.log("series added.");
 
-for (let i = 0; i < 100; i++) {
-  if (langs[i] !== undefined) langArr.push(langs[i]);
+  const langArr = [];
+  for (let i = 0; i < 100; i++) {
+    if (langs[i] !== undefined) langArr.push(langs[i]);
+  }
+  await addLanguagesToDb(langArr);
+  console.log("languages added.");
+} catch (err) {
+  console.error("Error occurred while adding data to DB:", err);
 }
-
-addLanguagesToDb(langArr)
-  .then((res) => {
-    console.log("languages added.");
-  })
-  .catch((err) => {
-    console.log("error while inserting languages.");
-    throw err;
-  });
