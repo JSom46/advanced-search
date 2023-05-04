@@ -1,7 +1,51 @@
 import { Area } from "../../utils/area.js";
 import { addLanguagesToDb } from "../addLanguagesToDb.js";
 import { addTagsToDb } from "../addTagsToDb.js";
-import { getTagsFromHitomi } from "../../externalDataAccess/getTags.js";
+import { getTags } from "../../externalDataAccess/getTags.js";
+import path from "path";
+import fs from "fs";
+import pg from "pg";
+import { fileURLToPath } from "url";
+
+const filePath = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "create_db.sql"
+);
+
+// Read the SQL code from the file
+const sql = fs
+  .readFileSync(filePath)
+  .toString()
+  .replace(/--.*$/gm, "") // delete comments
+  .replace(/(\r\n|\n|\r)/gm, " ") // delete newlines
+  .replace(/\s+/g, " "); // delete excessive spaces
+
+// Create a new PostgreSQL client
+const client = new pg.Client({
+  user: process.env.PG_USER,
+  database: process.env.DB_NAME,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+  host: process.env.PG_HOST,
+});
+
+// Connect to the database
+await client.connect();
+
+try {
+  await client.query("BEGIN");
+  await client.query(sql);
+  await client.query("COMMIT");
+} catch (err) {
+  // something wwent wrong - rollback changes
+  await client.query("ROLLBACK");
+  throw err;
+}
+
+console.log("database created.");
+
+// Disconnect from the database
+await client.end();
 
 const langs = {
   32: "mongolian",
@@ -49,24 +93,55 @@ const langs = {
 };
 const langArr = [];
 
-getTagsFromHitomi(Area.tag).then((tags) => {
-  addTagsToDb(Area.tag, tags);
-});
+getTags(Area.tag)
+  .then((tags) => {
+    addTagsToDb(tags, Area.tag);
+    console.log("tags added.");
+  })
+  .catch((err) => {
+    console.log("error while inserting tags.");
+    throw err;
+  });
 
-getTagsFromHitomi(Area.artists).then((artists) => {
-  addTagsToDb(Area.artist, artists);
-});
+getTags(Area.artists)
+  .then((artists) => {
+    addTagsToDb(artists, Area.artist);
+    console.log("artists added.");
+  })
+  .catch((err) => {
+    console.log("error while inserting artists.");
+    throw err;
+  });
 
-getTagsFromHitomi(Area.characters).then((characters) => {
-  addTagsToDb(Area.character, characters);
-});
+getTags(Area.characters)
+  .then((characters) => {
+    addTagsToDb(characters, Area.character);
+    console.log("characters added.");
+  })
+  .catch((err) => {
+    console.log("error while inserting characters.");
+    throw err;
+  });
 
-getTagsFromHitomi(Area.series).then((series) => {
-  addTagsToDb(Area.series, series);
-});
+getTags(Area.series)
+  .then((series) => {
+    addTagsToDb(series, Area.series);
+    console.log("series added.");
+  })
+  .catch((err) => {
+    console.log("error while inserting series.");
+    throw err;
+  });
 
 for (let i = 0; i < 100; i++) {
   if (langs[i] !== undefined) langArr.push(langs[i]);
 }
 
-await addLanguagesToDb(langArr);
+addLanguagesToDb(langArr)
+  .then((res) => {
+    console.log("languages added.");
+  })
+  .catch((err) => {
+    console.log("error while inserting languages.");
+    throw err;
+  });
