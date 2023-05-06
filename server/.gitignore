@@ -134,3 +134,6 @@ dist
 
 # .bak files
 *.bak
+
+# files created for use on local machine only
+*.local.*
