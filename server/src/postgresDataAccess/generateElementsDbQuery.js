@@ -1,4 +1,4 @@
-import { Area } from "../utils/area.js";
+import Area from "../utils/area.js";
 
 /* structure of query object
 [
@@ -13,7 +13,7 @@ import { Area } from "../utils/area.js";
 	}
 ]
 */
-export const generateElementsDbQuery = (query, page, pageSize) => {
+export default function (query, page, pageSize) {
   const vals = [];
   const whereClause = [];
   let i = 1;
@@ -86,4 +86,4 @@ export const generateElementsDbQuery = (query, page, pageSize) => {
       : ";");
 
   return { query: queryString, parameters: vals };
-};
+}

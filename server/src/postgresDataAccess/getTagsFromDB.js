@@ -1,12 +1,9 @@
-import { generateTagsDbQuery } from "./generateTagsDbQuery.js";
-import { pool } from "./pgCon.js";
+export default async function (area, group = "a") {
+  const query = this.generateTagsDbQuery(area, group);
 
-export const getTagsFromDb = async (area, group = "a") => {
-  const query = generateTagsDbQuery(area, group);
+  console.log(`tags query: ${query}`);
 
-  console.log(query);
-
-  const tags = await pool.query(query);
+  const tags = await this.pool.query(query);
 
   return tags.rows.map((r) => r.name);
-};
+}

@@ -1,4 +1,4 @@
-import { isValidArea } from "./area.js";
+import Area from "./area.js";
 
 export const validateElementsQueryParams = (params, page, pageSize) => {
   if (
@@ -11,7 +11,7 @@ export const validateElementsQueryParams = (params, page, pageSize) => {
 
   params.forEach((el) => {
     el.vals.forEach((val) => {
-      if (!isValidArea(val.area) || val === undefined) return false;
+      if (!Area.isValidArea(val.area) || val === undefined) return false;
     });
   });
 

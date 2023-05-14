@@ -1,7 +1,9 @@
-import { sqlRegexFromTagGroup } from "../utils/tagGroup.js";
+import TagGroup from "../utils/tagGroup.js";
 
-export const generateTagsDbQuery = (area, group) => {
+export default function (area, group) {
   return `SELECT name FROM ${area} ${
-    group === "all" ? "" : `WHERE name ~ '${sqlRegexFromTagGroup(group)}'`
+    group === "all"
+      ? ""
+      : `WHERE name ~ '${TagGroup.sqlRegexFromTagGroup(group)}'`
   };`;
-};
+}

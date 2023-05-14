@@ -1,4 +1,4 @@
-import { areaToString } from "../utils/area.js";
+import Area from "../utils/area.js";
 
 /*
 {
@@ -9,7 +9,7 @@ import { areaToString } from "../utils/area.js";
 */
 export const getElements = async (params) => {
   const url = `https://ltn.hitomi.la/${
-    params.area === undefined ? "" : areaToString(params.area) + "/"
+    params.area === undefined ? "" : Area.areaToString(params.area) + "/"
   }${params.tag}-${params.language}.nozomi`;
   const ids = [];
   const res = await fetch(url);

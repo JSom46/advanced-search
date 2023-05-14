@@ -1,7 +1,6 @@
-import { pool } from "./pgCon.js";
-import { Area } from "../utils/area.js";
+import Area from "../utils/area.js";
 
-export const getOutdatedTags = async (params) => {
+export default async function (params) {
   const tags = [];
   const artists = [];
   const characters = [];
@@ -40,7 +39,7 @@ export const getOutdatedTags = async (params) => {
 
   console.log([languages, characters, tags, series, artists]);
 
-  const outdatedTags = await pool.query(
+  const outdatedTags = await this.pool.query(
     `
         SELECT name, area FROM 
             ((SELECT '' name, (SELECT COUNT(1) FROM updates WHERE update_date = CURRENT_DATE AND updated_table = 'elements') area) UNION
@@ -74,4 +73,4 @@ export const getOutdatedTags = async (params) => {
     indexOutOfDate: indexOutOfDate,
     tags: outdatedTags.rows,
   };
-};
+}

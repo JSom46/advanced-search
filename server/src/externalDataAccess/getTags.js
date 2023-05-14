@@ -1,13 +1,18 @@
 import * as cheerio from "cheerio";
-import { Area, areaToString } from "../utils/area.js";
-import { pool } from "../postgresDataAccess/pgCon.js";
+import Area from "../utils/area.js";
+import PostgresDataAccess from "../postgresDataAccess/postgresDataAccess.js";
 
 export const getTags = async (area) => {
   if (area == Area.language) {
-    return (await pool.query("SELECT id, name FROM languages;")).rows;
+    return (
+      await PostgresDataAccess.pool.query("SELECT id, name FROM languages;")
+    ).rows;
   } else {
     const urls = process.env.TAGS_GROUPS.split(",").map((group) => {
-      return `https://hitomi.la/all${areaToString(area, true)}-${group}.html`;
+      return `https://hitomi.la/all${Area.areaToString(
+        area,
+        true
+      )}-${group}.html`;
     });
 
     const promises = urls.map((url) => fetch(url));
