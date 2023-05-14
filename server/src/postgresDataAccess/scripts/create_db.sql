@@ -31,12 +31,16 @@ BEGIN
 CASE area
 WHEN 1 THEN
 INSERT INTO characters (name) SELECT unnest(names) ON CONFLICT DO NOTHING;
+INSERT INTO updates (update_date, updated_table) VALUES (CURRENT_DATE, 'characters');
 WHEN 2 THEN
 INSERT INTO tags (name) SELECT unnest(names) ON CONFLICT DO NOTHING;
+INSERT INTO updates (update_date, updated_table) VALUES (CURRENT_DATE, 'tags');
 WHEN 3 THEN
 INSERT INTO series (name) SELECT unnest(names) ON CONFLICT DO NOTHING;
+INSERT INTO updates (update_date, updated_table) VALUES (CURRENT_DATE, 'series');
 WHEN 4 THEN
 INSERT INTO artists (name) SELECT unnest(names) ON CONFLICT DO NOTHING;
+INSERT INTO updates (update_date, updated_table) VALUES (CURRENT_DATE, 'artists');
 ELSE
 RAISE EXCEPTION 'Invalid area: %', area;
 END CASE;
