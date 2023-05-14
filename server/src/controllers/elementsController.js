@@ -1,13 +1,12 @@
 import Express from "express";
-import { getElements } from "../utils/getElements.js";
-import { validateElementsQueryParams } from "../utils/validateElementsQueryParams.js";
+import Utils from "../utils/utils.js";
 
 const router = Express.Router();
 
 router.post("/query", async (req, res) => {
   req.body.params = req.body.params || [];
   if (
-    !validateElementsQueryParams(
+    !Utils.validateElementsQueryParams(
       req.body.params,
       req.body.page,
       req.body.pageSize
@@ -19,7 +18,7 @@ router.post("/query", async (req, res) => {
   console.log(req.body.pageSize);
 
   try {
-    const elements = await getElements(
+    const elements = await Utils.getElements(
       req.body.params,
       req.body.page,
       req.body.pageSize

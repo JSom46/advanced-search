@@ -1,6 +1,4 @@
-import { pool } from "./pgCon.js";
-
-export const addLanguagesToDb = async (languages) => {
+export default async function (languages) {
   // yes, query string is not sanitized i know
   const query = `INSERT INTO languages (id, name) VALUES 
             ${languages.reduce(
@@ -9,5 +7,5 @@ export const addLanguagesToDb = async (languages) => {
               ""
             )} 
             ON CONFLICT DO NOTHING;`;
-  await pool.query(query);
-};
+  await this.pool.query(query);
+}

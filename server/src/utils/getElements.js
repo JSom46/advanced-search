@@ -1,10 +1,6 @@
-import { Area } from "./area.js";
-import { addTagElementsToDb } from "../postgresDataAccess/addTagElementsToDb.js";
-import { addElementsToDb } from "../postgresDataAccess/addElementsToDb.js";
-import { getOutdatedTags } from "../postgresDataAccess/getOutdatedTags.js";
-import { getElementsFromDb } from "../postgresDataAccess/getElementsFromDb.js";
-import { getElements } from "../externalDataAccess/getElements.js";
-import { parseURL } from "../externalDataAccess/parseURL.js";
+import Area from "./area.js";
+import PostgresDataAccess from "../postgresDataAccess/postgresDataAccess.js";
+import ExternalDataAccess from "../externalDataAccess/externalDataAccess.js";
 
 /* structure of params object
 [
@@ -20,20 +16,22 @@ import { parseURL } from "../externalDataAccess/parseURL.js";
 ]
 */
 export const getElements = async (params, page = 1, pageSize = 50) => {
-  const outdatedTags = await getOutdatedTags(params);
+  const outdatedTags = await PostgresDataAccess.getOutdatedTags(params);
 
   console.log("Outdated tags");
   console.log(outdatedTags);
 
   if (outdatedTags.indexOutOfDate) {
-    const hitomi = await getElements(parseURL("https://hitomi.la/"));
+    const hitomi = await ExternalDataAccess.getElements(
+      ExternalDataAccess.parseURL("https://hitomi.la/")
+    );
     console.log(hitomi);
-    await addElementsToDb(hitomi);
+    await PostgresDataAccess.addElementsToDb(hitomi);
   }
 
   const tagsElements = await Promise.all(
     outdatedTags.tags.map((t) =>
-      getElements(
+      ExternalDataAccess.getElements(
         t.area == Area.language
           ? { tag: "index", language: t.name }
           : { tag: t.name, area: t.area, language: "all" }
@@ -46,9 +44,9 @@ export const getElements = async (params, page = 1, pageSize = 50) => {
 
   await Promise.all(
     outdatedTags.tags.map((t, idx) =>
-      addTagElementsToDb(t.name, t.area, tagsElements[idx])
+      PostgresDataAccess.addTagElementsToDb(t.name, t.area, tagsElements[idx])
     )
   );
 
-  return await getElementsFromDb(params, page, pageSize);
+  return await PostgresDataAccess.getElementsFromDb(params, page, pageSize);
 };

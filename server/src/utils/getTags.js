@@ -1,6 +1,6 @@
-import { getTagsFromDb } from "../postgresDataAccess/getTagsFromDB.js";
+import PostgresDataAccess from "../postgresDataAccess/postgresDataAccess.js";
 
 export const getTags = async (area, group = "a") => {
-  const tags = await getTagsFromDb(area, group);
+  const tags = await PostgresDataAccess.getTagsFromDb(area, group);
   return tags;
 };
