@@ -10,6 +10,7 @@ import generateElementsDbQuery from "./generateElementsDbQuery.js";
 import generateTagsDbQuery from "./generateTagsDbQuery.js";
 import getElementsFromDb from "./getElementsFromDb.js";
 import getTagsFromDb from "./getTagsFromDB.js";
+import IsAreaOutdated from "./IsAreaOutdated.js";
 
 export default class PostgresDataAccess {
   static pool = new pg.Pool({
@@ -29,4 +30,5 @@ export default class PostgresDataAccess {
   static addTagsToDb = addTagsToDb;
   static generateElementsDbQuery = generateElementsDbQuery;
   static generateTagsDbQuery = generateTagsDbQuery;
+  static IsAreaOutdated = IsAreaOutdated;
 }
